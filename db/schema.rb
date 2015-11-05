@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151102015050) do
+ActiveRecord::Schema.define(version: 20151104013826) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -30,23 +30,23 @@ ActiveRecord::Schema.define(version: 20151102015050) do
   add_index "comments", ["author_id"], name: "index_comments_on_author_id"
   add_index "comments", ["post_id"], name: "index_comments_on_post_id"
 
-  create_table "post_authors", force: :cascade do |t|
-    t.integer  "user_id"
-    t.integer  "post_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "post_authors", ["user_id", "post_id"], name: "index_post_authors_on_user_id_and_post_id", unique: true
-
-  create_table "post_taggings", force: :cascade do |t|
+  create_table "post_tags", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "post_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "post_taggings", ["tag_id", "post_id"], name: "index_post_taggings_on_tag_id_and_post_id", unique: true
+  add_index "post_tags", ["tag_id", "post_id"], name: "index_post_tags_on_tag_id_and_post_id", unique: true
+
+  create_table "post_users", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "post_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "post_users", ["user_id", "post_id"], name: "index_post_users_on_user_id_and_post_id", unique: true
 
   create_table "posts", force: :cascade do |t|
     t.string   "title"

@@ -1,15 +1,13 @@
 class Post < ActiveRecord::Base
-  has_many :comments
+  has_many :comments, dependent: :destroy
   belongs_to :category
 
-  # Post taggings has a model
-  has_many :post_taggings
+  # Post has a many to many relationship with both tags and users
+  # and its THROUGH posts that we ultimately chained the relationship to get
+  # a user's tags and vice-versa.
+  has_many :post_taggings, class_name: "PostTag", dependent: :destroy
   has_many :tags, through: :post_taggings
 
-  # Post authors does not, also from this side we want to say Post.authors
-  # instead of Post.users.  Would have been easier to use the table name
-  # rails is expecting - posts_users.
-  has_and_belongs_to_many :authors, join_table: :post_authors, 
-                          class_name: "User"
-  
+  has_many :post_authorings, class_name: "PostUser", dependent: :destroy
+  has_many :authors, through: :post_authorings, source: :user
 end
