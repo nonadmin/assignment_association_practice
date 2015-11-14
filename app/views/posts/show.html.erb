@@ -1,0 +1,16 @@
+<p>Title: <%= @post.title %></p>
+<p>Body: <%= @post.body %></p>
+<p>Tags:
+  <% @post.tags.each do |tag| %>
+    <%= tag.name %>, 
+  <% end %>
+</p>
+<% if @post.category %>
+<p>Category:
+  <%= @post.category.name %>
+</p>
+<% end %>
+
+<p>
+  <%= link_to 'edit', edit_post_path(@post)  %>
+</p>
