@@ -1,31 +1,58 @@
-<%= form_for post do |f| %>
-  <%= f.label :title %>
-  <%= f.text_field :title %>
+<%= form_for post do |post_form| %>
+  <%= post_form.label :title %>
+  <%= post_form.text_field :title %>
   <br>
-  <%= f.label :body %>
-  <%= f.text_field :body %>
+  <%= post_form.label :body %>
+  <%= post_form.text_field :body %>
   <br>
-  <!-- <%= f.collection_check_boxes(:tag_ids, Tag.all, :id, :name) %> -->
-  <%= f.label :tag_ids, "Select Tag(s)" %><br>
-  <%= f.collection_select(:tag_ids, 
+  <!-- <%= post_form.collection_check_boxes(:tag_ids, 
+                                            Tag.all,
+                                            :id, 
+                                            :name) %> -->
+  <%= post_form.label :tag_ids, "Select Tag(s)" %><br>
+  <%= post_form.collection_select(:tag_ids, 
                           Tag.all, 
                           :id, 
-                          :name, {include_blank: "Remove Tags"},
-                          { multiple: true, size: 5 },
-                           ) %>
+                          :name, 
+                          { include_blank: "Remove Tags" },
+                          { multiple: true, size: 5 } ) %>
 
   <br>
-  <!-- <%= f.collection_radio_buttons(:category_id, Category.all, :id, :name) %> -->
+  <!-- <%= post_form.collection_radio_buttons(:category_id, 
+                                              Category.all,
+                                              :id, 
+                                              :name) %> -->
 
- <!--  <%= f.collection_select(:category_id, Category.all, :id, :name, {include_blank: "no category"}) %> -->
+ <!--  <%= post_form.collection_select(:category_id, 
+                                       Category.all,
+                                       :id, 
+                                       :name, 
+                                       {include_blank: "no category"}) %> -->
  
- <%= f.label :category_id, "Select a Category"  %><br> 
+ <%= post_form.label :category_id, "Select a Category"  %><br> 
  <%= select_tag("post[category_id]", 
      options_from_collection_for_select( Category.all, 
                                          "id", 
                                          "name",
                                          post.category_id ), 
                                          include_blank: "No Category") %>
+  <%= post_form.fields_for :comments do |comment_form| %>
+    <hr>
+    <%= comment_form.label :body, "Comment" %>
+    <%= comment_form.text_field :body %>
+    <br>
+    <%= comment_form.label :author_id, "Comment Author" %>
+    <%= comment_form.collection_select(:author_id,
+                                       User.all,
+                                       :id,
+                                       :name,
+                                       prompt: "Select Comment Author" ) %>
+    <% if comment_form.object.persisted? %>
+      <br>
+      <%= comment_form.label :_destroy, "Delete Comment" %>
+      <%= comment_form.check_box :_destroy %>
+    <% end %>
+  <% end %>
   <br>
-  <%= f.submit %>
+  <%= post_form.submit %>
 <% end %>

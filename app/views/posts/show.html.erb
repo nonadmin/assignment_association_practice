@@ -11,6 +11,14 @@
 </p>
 <% end %>
 
+<% @post.comments.each do |comment| %>
+  <hr>
+  <p>
+    <%= comment.author.name %><br>
+    <%= comment.body %>
+  </p>
+<% end %>
+
 <p>
   <%= link_to 'edit', edit_post_path(@post)  %>
 </p>

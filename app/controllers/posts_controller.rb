@@ -12,6 +12,7 @@ class PostsController < ApplicationController
 
   def create
     @post = Post.new(post_params)
+    @post.comments.build
     if @post.save
       flash[:success] = "New Post Created"
       redirect_to @post
@@ -24,6 +25,7 @@ class PostsController < ApplicationController
 
   def edit
     @post = Post.find(params[:id])
+    @post.comments.build
   end
 
 
@@ -33,6 +35,7 @@ class PostsController < ApplicationController
       flash[:success] = "Post Editted"
       redirect_to @post
     else
+      @post.comments.build
       flash.now[:danger] = "That didn't work!"
       render :edit
     end
@@ -43,7 +46,9 @@ class PostsController < ApplicationController
 
 
   def post_params
-    params.require(:post).permit(:title, :body, :category_id, tag_ids: [])
+    params.require(:post).permit(:title, :body, :category_id, tag_ids: [],
+                                 comments_attributes: [:body, :author_id, :id,
+                                 :_destroy])
   end
 
 end
